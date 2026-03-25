@@ -7,5 +7,31 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(readr)
+
+d_coronavirus <- read_csv('../data/life-under-lockdown-wave2-extract.csv')
+
 ```
 
+# Hypothesis
+H1 gender is associated with number of conspiracy beliefs about coronavirus
+
+# Findings
+```{r}
+d_coronavirus %>%
+ group_by (gender) %>%
+ summarise(
+	 n = n(), 
+	 M = mean (beliefs), 
+	 Mdn = median (beliefs),
+	 Sd = sd (beliefs)
+	)
+```
+```{r}
+d_coronavirus %>%
+  filter (gender != 'In another way') %>%
+  t.test (beliefs ~ gender, data = .)
+```
+Males in the sample believed in more conspiracy theories than females, but this was not statistically significant, t(494.31) = -1.201, p = .230.
